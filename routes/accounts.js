@@ -41,13 +41,17 @@ router.get("/", (_, res) => {
 });
 
 router.get("/:id", (req, res) => {
-  //req.params.id;
   fs.readFile(global.fileName, "utf8", (err, data) => {
     if (!err) {
       let json = JSON.parse(data);
-      const account = json.account.find(
-        (account) => account.id === req.params.id
+      const account = json.accounts.find(
+        (account) => account.id === parseInt(req.params.id, 10)
       );
+      if (account) {
+        res.send(account);
+      } else {
+        res.end();
+      }
     } else {
       res.status(400).send({ error: err.message });
     }
